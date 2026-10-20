@@ -1,0 +1,655 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grammar Reading Lab | 관계대명사</title>
+<style>
+:root {
+  --navy: #233b63;
+  --blue: #4269b2;
+  --pale: #eef3fc;
+  --yellow: #fff1c6;
+  --green: #267653;
+  --red: #b94b4b;
+  --ink: #273449;
+  --muted: #69778b;
+  --line: #e0e6ef;
+  --white: #ffffff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #f4f6fa;
+  color: var(--ink);
+  font-family: Arial, "Malgun Gothic", sans-serif;
+  line-height: 1.7;
+}
+button { font: inherit; cursor: pointer; }
+button:focus-visible {
+  outline: 3px solid #f0b82f;
+  outline-offset: 3px;
+}
+header {
+  background: var(--navy);
+  color: white;
+  padding: 22px 20px;
+}
+.header-inner, main {
+  width: min(820px, 100%);
+  margin: auto;
+}
+.brand {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #d7e2f7;
+  font-weight: bold;
+}
+header h1 { margin: 5px 0; font-size: 27px; }
+header p { margin: 0; color: #e1e9f7; font-size: 14px; }
+main { padding: 20px 16px 48px; }
+.progress-wrap { margin-bottom: 20px; }
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+.progress {
+  height: 6px;
+  border-radius: 8px;
+  background: #e1e6ef;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--blue);
+  width: 25%;
+  transition: width .2s;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+  margin-bottom: 18px;
+}
+.step-tab {
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 10px;
+  padding: 10px 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.step-tab.active {
+  border-color: var(--blue);
+  background: var(--pale);
+  color: var(--navy);
+  font-weight: bold;
+}
+.step-tab:disabled { cursor: default; opacity: .65; }
+.card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px #233b6308;
+}
+.eyebrow {
+  font-size: 12px;
+  color: var(--blue);
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+h2 { font-size: 23px; line-height: 1.4; margin: 5px 0 12px; }
+h3 { font-size: 17px; margin: 22px 0 8px; }
+.muted { color: var(--muted); font-size: 14px; }
+.story {
+  background: #f7f9fd;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin: 18px 0;
+}
+.story p { margin: 0 0 13px; }
+.story p:last-child { margin-bottom: 0; }
+mark {
+  background: var(--yellow);
+  color: #5c4611;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.translation {
+  border-top: 1px dashed var(--line);
+  padding-top: 12px;
+  margin-top: 14px;
+  font-size: 14px;
+}
+.hidden { display: none !important; }
+.primary, .secondary {
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 18px;
+  font-weight: bold;
+}
+.primary { background: var(--blue); color: white; }
+.primary:hover { background: #345795; }
+.secondary { background: #edf0f6; color: var(--navy); }
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 24px;
+}
+.actions button { min-height: 44px; }
+.definition {
+  background: var(--pale);
+  border-left: 4px solid var(--blue);
+  padding: 14px 16px;
+  border-radius: 6px;
+  margin: 16px 0;
+}
+.example {
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+.example:last-child { border-bottom: 0; }
+.tag {
+  display: inline-block;
+  background: #e8eefb;
+  color: var(--navy);
+  border-radius: 5px;
+  padding: 2px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+.question {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.question:last-child { border-bottom: 0; }
+.q-title { font-weight: bold; margin-bottom: 12px; }
+.option {
+  display: block;
+  padding: 11px 13px;
+  margin: 7px 0;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  cursor: pointer;
+}
+.option:hover { background: #f7f9fd; }
+.option input { margin-right: 9px; accent-color: var(--blue); }
+.option.correct { border-color: var(--green); background: #edf8f1; }
+.option.wrong { border-color: var(--red); background: #fff0f0; }
+.feedback {
+  margin-top: 10px;
+  padding: 11px 13px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.feedback.good { background: #edf8f1; color: #1d6848; }
+.feedback.bad { background: #fff0f0; color: #963a3a; }
+.feedback.neutral { background: #f0f3f8; color: var(--ink); }
+.result-score {
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--blue);
+  margin: 8px 0;
+}
+.result-box {
+  background: var(--pale);
+  padding: 20px;
+  text-align: center;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+.footer-note {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 18px;
+}
+@media (max-width: 500px) {
+  header h1 { font-size: 23px; }
+  .card { padding: 18px; }
+  .step-tab { font-size: 11px; }
+  .actions button { flex: 1; padding: 10px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="brand">ENGLISH · READING · GRAMMAR</div>
+    <h1>Grammar Reading Lab</h1>
+    <p>짧은 글을 읽으며 발견하는 영어 문법</p>
+  </div>
+</header>
+
+<main>
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="progressText">STEP 1 · 글 읽기</span>
+      <span id="progressPercent">25% 진행</span>
+    </div>
+    <div class="progress">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <nav class="steps" aria-label="학습 단계">
+    <button class="step-tab active" data-step="0">1. 읽기</button>
+    <button class="step-tab" data-step="1" disabled>2. 발견</button>
+    <button class="step-tab" data-step="2" disabled>3. 개념</button>
+    <button class="step-tab" data-step="3" disabled>4. 연습</button>
+  </nav>
+
+  <section class="card" id="stage0">
+    <div class="eyebrow">STEP 1 · READING</div>
+    <h2>A Fun Day at the Park</h2>
+    <p class="muted">먼저 글 전체를 읽어 보세요. 노란색으로 표시된 표현에 주목하세요.</p>
+
+    <div class="story">
+      <p>1. Mia has a dog <mark>that loves soccer</mark>.</p>
+      <p>2. One day, she meets a boy <mark>who plays soccer</mark> after school.</p>
+      <p>3. He brings a ball <mark>that is made of soft rubber</mark>.</p>
+      <p>4. They go to a park <mark>which is near their school</mark>.</p>
+      <p>5. A girl <mark>who lives nearby</mark> joins them.</p>
+      <p>6. They play a game <mark>that makes everyone happy</mark>.</p>
+
+      <div class="translation">
+        <strong>해석 보기</strong>
+        <button class="secondary" id="translationBtn" type="button"
+          aria-expanded="false" style="margin-left:8px;padding:5px 10px">
+          해석 열기
+        </button>
+        <div id="translationText" class="hidden">
+          <p>1. 미아는 축구를 좋아하는 개를 키운다.</p>
+          <p>2. 어느 날, 그녀는 방과 후에 축구를 하는 남자아이를 만난다.</p>
+          <p>3. 그 남자아이는 부드러운 고무로 만들어진 공을 가져온다.</p>
+          <p>4. 그들은 학교 근처에 있는 공원으로 간다.</p>
+          <p>5. 근처에 사는 여자아이가 그들과 합류한다.</p>
+          <p>6. 그들은 모두를 행복하게 만드는 게임을 한다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="definition">
+      <strong>생각해 보기</strong><br>
+      노란색 표현들은 앞에 있는 명사에 대한 추가 정보를 알려 줍니다.
+      어떤 단어가 이 두 부분을 연결하고 있을까요?
+    </div>
+
+    <div class="actions">
+      <span></span>
+      <button class="primary" id="to1">다 읽었어요 →</button>
+    </div>
+  </section>
+
+  <section class="card hidden" id="stage1">
+    <div class="eyebrow">STEP 2 · DISCOVERY</div>
+    <h2>문법 규칙을 발견해 보세요!</h2>
+    <p>글에서 노란색으로 표시된 단어는 <strong>that, who, which</strong>입니다.</p>
+
+    <div class="question">
+      <div class="q-title">Q1. 다음 문장에서 개를 설명하는 부분은 무엇인가요?</div>
+      <p>The dog <mark>that loves soccer</mark> is cute.</p>
+      <label class="option"><input type="radio" name="discover1" value="a"> The dog</label>
+      <label class="option"><input type="radio" name="discover1" value="b"> that loves soccer</label>
+      <label class="option"><input type="radio" name="discover1" value="c"> is cute</label>
+      <div id="discoverFeedback1" class="feedback hidden" aria-live="polite"></div>
+      <button class="secondary" type="button" onclick="checkDiscovery(1,'b')">정답 확인</button>
+    </div>
+
+    <div class="question">
+      <div class="q-title">Q2. who 뒤에 나오는 plays soccer는 누구에 대한 설명인가요?</div>
+      <p>a boy <mark>who plays soccer</mark></p>
+      <label class="option"><input type="radio" name="discover2" value="a"> 축구공</label>
+      <label class="option"><input type="radio" name="discover2" value="b"> 남자아이</label>
+      <label class="option"><input type="radio" name="discover2" value="c"> 공원</label>
+      <div id="discoverFeedback2" class="feedback hidden" aria-live="polite"></div>
+      <button class="secondary" type="button" onclick="checkDiscovery(2,'b')">정답 확인</button>
+    </div>
+
+    <div class="definition">
+      <strong>핵심 발견</strong><br>
+      관계대명사는 앞에 나온 명사를 뒤의 설명과 연결해 주는 역할을 합니다.
+    </div>
+
+    <div class="actions">
+      <button class="secondary" id="back0">← 이전</button>
+      <button class="primary" id="to2">개념 배우기 →</button>
+    </div>
+  </section>
+
+  <section class="card hidden" id="stage2">
+    <div class="eyebrow">STEP 3 · GRAMMAR</div>
+    <h2>주격 관계대명사 알아보기</h2>
+    <p>이번 수업의 핵심은 <strong>who, which, that</strong>입니다.</p>
+
+    <div class="definition">
+      <strong>관계대명사란?</strong><br>
+      두 문장을 연결하면서 앞에 나온 명사에 대한 추가 정보를 전달하는 말입니다.
+    </div>
+
+    <h3>1. 어떤 관계대명사를 사용할까요?</h3>
+    <div class="example">
+      <span class="tag">사람</span><strong>who</strong>
+      <p>The boy <mark>who plays soccer</mark> is kind.</p>
+      <p class="muted">축구를 하는 그 남자아이는 친절하다.</p>
+    </div>
+    <div class="example">
+      <span class="tag">사물·동물</span><strong>which</strong>
+      <p>The ball <mark>which is on the desk</mark> is mine.</p>
+      <p class="muted">책상 위에 있는 공은 내 것이다.</p>
+    </div>
+    <div class="example">
+      <span class="tag">사람·사물·동물</span><strong>that</strong>
+      <p>The dog <mark>that runs fast</mark> is Max.</p>
+      <p class="muted">빨리 달리는 개는 맥스다.</p>
+    </div>
+
+    <h3>2. 왜 '주격'이라고 부를까요?</h3>
+    <p>관계대명사 뒤의 동작을 누가 하는지 살펴보세요.</p>
+    <div class="story">
+      <p>The boy <strong>plays</strong> soccer.</p>
+      <p>The boy <strong>who plays</strong> soccer is kind.</p>
+    </div>
+    <p>두 번째 문장에서는 <strong>who</strong>가 뒤의 동사 <strong>plays</strong>의 주어 역할을 합니다. 그래서 주격 관계대명사라고 부릅니다.</p>
+
+    <div class="definition">
+      <strong>오늘의 기억 공식</strong><br>
+      사람 → who<br>
+      사물·동물 → which<br>
+      사람·사물·동물 → that<br><br>
+      주격 관계대명사 뒤에는 동사가 이어집니다.
+    </div>
+
+    <p class="muted">참고: 실제 영어에서는 사람에게 that을 쓰기도 하며, 사물·동물에는 that과 which를 모두 쓸 수 있는 경우가 많습니다.</p>
+
+    <div class="actions">
+      <button class="secondary" id="back1">← 이전</button>
+      <button class="primary" id="to3">문제 풀기 →</button>
+    </div>
+  </section>
+
+  <section class="card hidden" id="stage3">
+    <div class="eyebrow">STEP 4 · PRACTICE</div>
+    <h2>실력을 확인해 보세요!</h2>
+    <p class="muted">각 문제에서 알맞은 답을 선택한 뒤 정답 확인을 누르세요.</p>
+
+    <form id="quizForm">
+      <div class="question">
+        <div class="q-title">1. I know a girl (　　) speaks three languages.</div>
+        <label class="option"><input type="radio" name="q1" value="a"> which</label>
+        <label class="option"><input type="radio" name="q1" value="b"> who</label>
+        <label class="option"><input type="radio" name="q1" value="c"> where</label>
+        <div id="fb1" class="feedback hidden" aria-live="polite"></div>
+      </div>
+
+      <div class="question">
+        <div class="q-title">2. Look at the cat (　　) is sleeping on the sofa.</div>
+        <label class="option"><input type="radio" name="q2" value="a"> who</label>
+        <label class="option"><input type="radio" name="q2" value="b"> where</label>
+        <label class="option"><input type="radio" name="q2" value="c"> which</label>
+        <div id="fb2" class="feedback hidden" aria-live="polite"></div>
+      </div>
+
+      <div class="question">
+        <div class="q-title">3. 관계대명사의 역할로 가장 알맞은 것은?</div>
+        <label class="option"><input type="radio" name="q3" value="a"> 앞의 명사를 뒤에서 설명하는 절과 연결한다.</label>
+        <label class="option"><input type="radio" name="q3" value="b"> 문장의 시제를 과거로 바꾼다.</label>
+        <label class="option"><input type="radio" name="q3" value="c"> 항상 문장의 맨 앞에 온다.</label>
+        <div id="fb3" class="feedback hidden" aria-live="polite"></div>
+      </div>
+
+      <div class="question">
+        <div class="q-title">4. 두 문장을 바르게 연결한 것은?</div>
+        <p class="muted">I have a dog. It likes milk.</p>
+        <label class="option"><input type="radio" name="q4" value="a"> I have a dog who likes milk.</label>
+        <label class="option"><input type="radio" name="q4" value="b"> I have a dog which likes milk.</label>
+        <label class="option"><input type="radio" name="q4" value="c"> I have a dog where likes milk.</label>
+        <div id="fb4" class="feedback hidden" aria-live="polite"></div>
+      </div>
+
+      <div class="question">
+        <div class="q-title">5. 다음 문장에서 주격 관계대명사는?</div>
+        <p>The student <mark>that studies hard</mark> gets good grades.</p>
+        <label class="option"><input type="radio" name="q5" value="a"> student</label>
+        <label class="option"><input type="radio" name="q5" value="b"> studies</label>
+        <label class="option"><input type="radio" name="q5" value="c"> that</label>
+        <div id="fb5" class="feedback hidden" aria-live="polite"></div>
+      </div>
+
+      <div class="actions">
+        <button class="secondary" type="button" id="back2">← 개념 복습</button>
+        <button class="primary" type="submit" id="submitQuiz">채점하기</button>
+      </div>
+    </form>
+
+    <div id="quizResult" class="result-box hidden" aria-live="polite">
+      <h3 style="margin-top:0">학습 결과</h3>
+      <div class="result-score" id="scoreText">0 / 5</div>
+      <p id="resultMessage"></p>
+      <button class="primary" type="button" id="retryBtn">다시 풀기</button>
+      <button class="secondary" type="button" id="reviewBtn">개념 다시 보기</button>
+    </div>
+  </section>
+
+  <div class="footer-note">
+    Grammar Reading Lab · 중학교 3학년 영어 문법
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  let currentStep = 0;
+  let quizSubmitted = false;
+
+  const stepNames = [
+    "글 읽기",
+    "문법 발견",
+    "개념 학습",
+    "문제 풀이"
+  ];
+
+  const answers = {
+    q1: "b",
+    q2: "c",
+    q3: "a",
+    q4: "b",
+    q5: "c"
+  };
+
+  const explanations = {
+    q1: "girl은 사람이므로 who를 사용합니다. who가 뒤의 speaks의 주어입니다.",
+    q2: "cat은 동물이므로 which를 사용할 수 있습니다. which가 뒤의 is sleeping의 주어입니다.",
+    q3: "관계대명사는 앞의 명사와 그 명사를 설명하는 절을 연결합니다.",
+    q4: "dog는 동물이므로 which를 사용할 수 있습니다. which likes milk가 dog를 설명합니다.",
+    q5: "that이 관계대명사이며, 뒤의 studies의 주어 역할을 합니다."
+  };
+
+  const stages = [0, 1, 2, 3].map(
+    n => document.getElementById("stage" + n)
+  );
+  const tabs = Array.from(document.querySelectorAll(".step-tab"));
+
+  function showStep(step) {
+    currentStep = step;
+
+    stages.forEach((el, i) => {
+      el.classList.toggle("hidden", i !== step);
+    });
+
+    tabs.forEach((tab, i) => {
+      tab.classList.toggle("active", i === step);
+      tab.setAttribute("aria-current", i === step ? "step" : "false");
+    });
+
+    document.getElementById("progressText").textContent =
+      "STEP " + (step + 1) + " · " + stepNames[step];
+    document.getElementById("progressPercent").textContent =
+      Math.round(((step + 1) / 4) * 100) + "% 진행";
+    document.getElementById("progressFill").style.width =
+      ((step + 1) / 4) * 100 + "%";
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function unlockStep(step) {
+    tabs[step].disabled = false;
+    showStep(step);
+  }
+
+  document.getElementById("translationBtn").addEventListener("click", function () {
+    const panel = document.getElementById("translationText");
+    const opening = panel.classList.contains("hidden");
+    panel.classList.toggle("hidden", !opening);
+    this.textContent = opening ? "해석 닫기" : "해석 열기";
+    this.setAttribute("aria-expanded", String(opening));
+  });
+
+  document.getElementById("to1").addEventListener("click", () => unlockStep(1));
+  document.getElementById("back0").addEventListener("click", () => showStep(0));
+  document.getElementById("to2").addEventListener("click", () => unlockStep(2));
+  document.getElementById("back1").addEventListener("click", () => showStep(1));
+  document.getElementById("to3").addEventListener("click", () => unlockStep(3));
+  document.getElementById("back2").addEventListener("click", () => showStep(2));
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => {
+      if (!tab.disabled) showStep(i);
+    });
+  });
+
+  window.checkDiscovery = function (number, correctAnswer) {
+    const selected = document.querySelector(
+      'input[name="discover' + number + '"]:checked'
+    );
+    const feedback = document.getElementById("discoverFeedback" + number);
+
+    feedback.classList.remove("hidden", "good", "bad");
+
+    if (!selected) {
+      feedback.classList.add("neutral");
+      feedback.textContent = "먼저 답을 선택해 주세요.";
+      return;
+    }
+
+    if (selected.value === correctAnswer) {
+      feedback.classList.add("good");
+      feedback.textContent = number === 1
+        ? "정답! that loves soccer가 dog를 설명합니다."
+        : "정답! who plays soccer는 boy를 설명합니다.";
+    } else {
+      feedback.classList.add("bad");
+      feedback.textContent = "다시 생각해 보세요. 설명을 받는 명사와 그 설명 부분을 찾아보세요.";
+    }
+  };
+
+  document.getElementById("quizForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    if (quizSubmitted) return;
+
+    let score = 0;
+    let unanswered = [];
+
+    Object.keys(answers).forEach((name, index) => {
+      const selected = document.querySelector(
+        'input[name="' + name + '"]:checked'
+      );
+      const feedback = document.getElementById("fb" + (index + 1));
+      const options = Array.from(
+        document.querySelectorAll('input[name="' + name + '"]')
+      );
+
+      options.forEach(input => {
+        input.disabled = true;
+        const label = input.closest(".option");
+        label.classList.remove("correct", "wrong");
+
+        if (input.value === answers[name]) {
+          label.classList.add("correct");
+        } else if (selected && input === selected) {
+          label.classList.add("wrong");
+        }
+      });
+
+      feedback.classList.remove("hidden", "good", "bad", "neutral");
+
+      if (!selected) {
+        unanswered.push(index + 1);
+        feedback.classList.add("neutral");
+        feedback.textContent = "미응답입니다. 정답: " +
+          answers[name].toUpperCase() + ". " + explanations[name];
+      } else if (selected.value === answers[name]) {
+        score++;
+        feedback.classList.add("good");
+        feedback.textContent = "정답! " + explanations[name];
+      } else {
+        feedback.classList.add("bad");
+        feedback.textContent = "아쉬워요. 정답은 " +
+          answers[name].toUpperCase() + "입니다. " + explanations[name];
+      }
+    });
+
+    quizSubmitted = true;
+    document.getElementById("scoreText").textContent = score + " / 5";
+
+    let message;
+    if (score === 5) {
+      message = "완벽해요! 주격 관계대명사의 핵심 개념을 잘 이해했어요.";
+    } else if (score >= 3) {
+      message = "잘했어요! 틀린 문제의 해설을 읽고 개념을 한 번 더 확인해 보세요.";
+    } else {
+      message = "괜찮아요. 개념 학습 단계로 돌아가 who, which, that의 쓰임을 복습해 보세요.";
+    }
+
+    if (unanswered.length > 0) {
+      message += " 답하지 않은 문제도 확인해 보세요.";
+    }
+
+    document.getElementById("resultMessage").textContent = message;
+    document.getElementById("quizResult").classList.remove("hidden");
+    document.getElementById("submitQuiz").disabled = true;
+    document.getElementById("quizResult").scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  });
+
+  document.getElementById("retryBtn").addEventListener("click", function () {
+    quizSubmitted = false;
+    document.getElementById("quizForm").reset();
+
+    Object.keys(answers).forEach((name, index) => {
+      const feedback = document.getElementById("fb" + (index + 1));
+      feedback.classList.add("hidden");
+      feedback.textContent = "";
+
+      document.querySelectorAll('input[name="' + name + '"]').forEach(input => {
+        input.disabled = false;
+        input.closest(".option").classList.remove("correct", "wrong");
+      });
+    });
+
+    document.getElementById("quizResult").classList.add("hidden");
+    document.getElementById("submitQuiz").disabled = false;
+    showStep(3);
+  });
+
+  document.getElementById("reviewBtn").addEventListener("click", function () {
+    showStep(2);
+  });
+
+  showStep(0);
+})();
+</script>
+</body>
+</html>
